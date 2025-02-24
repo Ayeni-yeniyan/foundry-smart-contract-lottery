@@ -10,7 +10,7 @@ abstract contract CodeContants {
     int256 public constant MOCK_WEI_PER_UINT_LINK = 1e6;
 
     uint256 public constant ETH_SEPOLIA_CHAINID = 1115511;
-    uint256 public constant LOCAL_CHAINID = 1115511;
+    uint256 public constant LOCAL_CHAINID = 31337;
 }
 
 contract HelperConfig is Script, CodeContants {
@@ -29,6 +29,7 @@ contract HelperConfig is Script, CodeContants {
 
     constructor() {
         networkConfigs[ETH_SEPOLIA_CHAINID] = getSepoliaEthConfig();
+        networkConfigs[LOCAL_CHAINID] = getOrCreateAnvilConfig();
     }
 
     function getConfigByChainId(

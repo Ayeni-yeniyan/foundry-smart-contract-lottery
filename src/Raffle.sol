@@ -138,10 +138,17 @@ upkeepNeeded=timeHasPassed&&isOpen&&hasBalance&&hasPlayers;
 
     function getPlayersNumber() external view returns (uint256) {
         return s_players.length;
+    } 
+    
+    function getPlayersAtIndex(uint256 index) external view returns (address) {
+        return s_players[index];
     }
 
     function getRaffleInterval() external view returns (uint256) {
         return i_interval;
+    }
+    function getRaffleState() external view returns (RaffleState) {
+        return s_raffleState;
     }
 
     function fulfillRandomWords(
