@@ -22,6 +22,7 @@ contract RaffleTest is Test {
     bytes32 gasLane;
     uint256 subscriptionId;
     uint32 callbackGasLimit;
+    address link;
 
     address public PLAYER = makeAddr("Player");
     uint256 constant PLAYER_STARTING_BALANCE = 10 ether;
@@ -42,9 +43,9 @@ contract RaffleTest is Test {
 
     // test demo
     // function testMock() public   {
-    // Arrange
-    // Act
-    // Assert
+    // // Arrange
+    // // Act
+    // // Assert
     // }
     function testRaffleInitInOpenState() public view {
         console.log("Current Chain ID:", block.chainid);
@@ -78,5 +79,17 @@ contract RaffleTest is Test {
         emit RaffleEntered(PLAYER);
         // Assert
         raffle.enterRaffle{value: entranceFee}();
+    }
+
+    function testDontAllowPlayersToEnterWhileCalculating() public {
+        // Arrange
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
+        vm.warp(block.chainid + interval + 1);
+        vm.roll(block.number + 1);
+        console.log("this is the sub id", subscriptionId);
+        raffle.performUpkeep("");
+        // Act // Assert
+        vm.expectRevert(Raffle.Raffle__RaffleNotOpen.selector);
     }
 }

@@ -99,7 +99,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     function checkUpkeep(bytes memory /** v */) public view  returns (
         bool upkeepNeeded,bytes memory /* PerformData */)  {
-         bool timeHasPassed=(block.timestamp - s_lastTimeStamp) < i_interval;
+         bool timeHasPassed=(block.timestamp - s_lastTimeStamp) > i_interval;
          bool isOpen=s_raffleState==RaffleState.OPEN;
          bool hasBalance =address(this).balance>0;
          bool hasPlayers =s_players.length>0;
@@ -110,7 +110,7 @@ upkeepNeeded=timeHasPassed&&isOpen&&hasBalance&&hasPlayers;
     /// Pick the winner of the raffle and send the winner the amount won
     // TODO: write test ensuring that the winner is selected at random
     // TODO: write test ensuring that the selected winner is paid all the raffle amount
-    function pickWinner(bytes calldata /** v */ x) external {
+    function performUpkeep(bytes calldata /** v */ x) external {
         (bool upkeedNeeded,)= checkUpkeep("");
         if ((block.timestamp - s_lastTimeStamp) < i_interval) {
             revert Raffle__UpkeepNotNeeded(address(this).balance,s_players.length,uint256(s_raffleState));
