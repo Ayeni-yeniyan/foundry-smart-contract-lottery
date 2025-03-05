@@ -74,8 +74,8 @@ contract HelperConfig is Script, CodeContants {
             MOCK_GAS_PRICE_LINK,
             MOCK_WEI_PER_UINT_LINK
         );
-        vm.stopBroadcast();
         LinkToken linkToken = new LinkToken();
+        vm.stopBroadcast();
         localNetworkConfig = NetworkConfig({
             entranceFee: 0.01 ether,
             interval: 30,

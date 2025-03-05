@@ -119,7 +119,7 @@ upkeepNeeded=timeHasPassed&&isOpen&&hasBalance&&hasPlayers;
         VRFV2PlusClient.RandomWordsRequest memory request = VRFV2PlusClient
             .RandomWordsRequest({
                 keyHash: i_keyhash, // Replace with actual keyHash
-                subId: 0, // Replace with actual subscription ID
+                subId: i_subscriptionId, // Replace with actual subscription ID
                 requestConfirmations: REQUEST_CONFIRMATION, // Replace with actual minimum request confirmations
                 callbackGasLimit: i_callbackGasLimit, // Replace with actual callback gas limit
                 numWords: NUM_WORDS, // Replace with actual number of words
