@@ -94,4 +94,62 @@ contract RaffleTest is Test {
         vm.prank(PLAYER);
         raffle.enterRaffle{value: entranceFee}();
     }
+
+    function testCheckUpkeepReturnsFalseIfRaffleIsNotOpen() public {
+        // Arrange
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
+        vm.warp(block.chainid + interval + 1);
+        vm.roll(block.number + 1);
+        raffle.performUpkeep("");
+        // Act // Assert
+        (bool upkeedNeeded, ) = raffle.checkUpkeep("");
+        assert(!upkeedNeeded);
+    }
+
+    function testCheckUpkeepReturnsFalseIfEnoughTimeHasPassed() public {
+        // Arrange
+        vm.warp(block.chainid + interval + 1);
+        vm.roll(block.number + 1);
+        // Act // Assert
+        (bool upkeedNeeded, ) = raffle.checkUpkeep("");
+        assert(!upkeedNeeded);
+    }
+
+    function testCheckUpkeepReturnsTrueWhenAllParametersAreGood() public {
+        // Arrange
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
+        vm.warp(block.chainid + interval + 1);
+        vm.roll(block.number + 1);
+        // Act // Assert
+        (bool upkeedNeeded, ) = raffle.checkUpkeep("");
+        assert(upkeedNeeded);
+    }
+
+    function testPerformUpkeepCanOnlyRunIfCheckUpkeepIsTrue() public {
+        // Arrange
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
+        vm.warp(block.chainid + interval + 1);
+        vm.roll(block.number + 1);
+        // Act // Assert
+        raffle.performUpkeep("");
+    }
+
+    function testPerformUpkeepRevertsWhenUpkeepNotNeeded() public {
+        // Arrange
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
+        // Act // Assert
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                Raffle.Raffle__UpkeepNotNeeded.selector,
+                entranceFee, // pass the entrance fee
+                1, // number of players
+                0 // raffle state
+            )
+        );
+        raffle.performUpkeep("");
+    }
 }

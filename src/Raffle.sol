@@ -63,6 +63,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     /* Events */
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
+    event RequestedTaffleWinner(uint256 indexed requestId);
 
     constructor(
         uint256 entranceFee,
@@ -103,16 +104,14 @@ contract Raffle is VRFConsumerBaseV2Plus {
          bool isOpen=s_raffleState==RaffleState.OPEN;
          bool hasBalance =address(this).balance>0;
          bool hasPlayers =s_players.length>0;
-upkeepNeeded=timeHasPassed&&isOpen&&hasBalance&&hasPlayers;
+        upkeepNeeded=timeHasPassed&&isOpen&&hasBalance&&hasPlayers;
          return (upkeepNeeded,"");
     }
 
     /// Pick the winner of the raffle and send the winner the amount won
-    // TODO: write test ensuring that the winner is selected at random
-    // TODO: write test ensuring that the selected winner is paid all the raffle amount
     function performUpkeep(bytes calldata /** v */ x) external {
         (bool upkeedNeeded,)= checkUpkeep("");
-        if ((block.timestamp - s_lastTimeStamp) < i_interval) {
+        if (!upkeedNeeded) {
             revert Raffle__UpkeepNotNeeded(address(this).balance,s_players.length,uint256(s_raffleState));
         }
         s_raffleState = RaffleState.CALCULATING;
@@ -128,6 +127,7 @@ upkeepNeeded=timeHasPassed&&isOpen&&hasBalance&&hasPlayers;
                 )
             });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
+        emit RequestedTaffleWinner(requestId);
         // Get random number from chainlink vrf
     }
 
