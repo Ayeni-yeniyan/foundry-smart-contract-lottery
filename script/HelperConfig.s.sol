@@ -59,7 +59,7 @@ contract HelperConfig is Script, CodeContants {
                 interval: 30,
                 vrfCoordinator: 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B,
                 gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
-                subscriptionId: 0,
+                subscriptionId: 9336012248805412778604210127291398955160904848787383021888683923072368698404,
                 callbackGasLimit: 500000,
                 link: 0x779877A7B0D9E8603169DdbD7836e478b4624789,
                 account: 0x688ce0CCf27a0D0B2b578199ACf3125a1F31f1c0
