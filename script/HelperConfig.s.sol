@@ -7,8 +7,9 @@ import {LinkToken} from "test/mocks/LinkToken.sol";
 abstract contract CodeContants {
     /* VRF mock values */
     uint96 public constant MOCK_BASE_FEE = 0.25 ether;
-    uint96 public constant MOCK_GAS_PRICE_LINK = 1e6;
-    int256 public constant MOCK_WEI_PER_UINT_LINK = 1e6;
+    uint96 public constant MOCK_GAS_PRICE_LINK = 1e9;
+    // LINK / ETH price
+    int256 public constant MOCK_WEI_PER_UINT_LINK = 4e15;
 
     uint256 public constant ETH_SEPOLIA_CHAINID = 11155111;
     uint256 public constant LOCAL_CHAINID = 31337;
@@ -24,6 +25,7 @@ contract HelperConfig is Script, CodeContants {
         uint256 subscriptionId;
         uint32 callbackGasLimit;
         address link;
+        address account;
     }
 
     NetworkConfig public localNetworkConfig;
@@ -59,7 +61,8 @@ contract HelperConfig is Script, CodeContants {
                 gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
                 subscriptionId: 0,
                 callbackGasLimit: 500000,
-                link: 0x514910771AF9Ca656af840dff83E8264EcF986CA
+                link: 0x779877A7B0D9E8603169DdbD7836e478b4624789,
+                account: 0x688ce0CCf27a0D0B2b578199ACf3125a1F31f1c0
             });
     }
 
@@ -83,7 +86,8 @@ contract HelperConfig is Script, CodeContants {
             gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
             subscriptionId: 0,
             callbackGasLimit: 500000,
-            link: address(linkToken)
+            link: address(linkToken),
+            account: 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38
         });
 
         return localNetworkConfig;
